@@ -1,0 +1,51 @@
+# Upptime's configuration: what is checked and how the page at status.tithipatra.com looks.
+# The workflows in .github/workflows are our own, not Upptime's generated ones (see README).
+owner: teispace
+repo: tithipatra-status
+user-agent: TithipatraStatus/1.0 (+https://status.tithipatra.com)
+
+# Tithipatra's public hosts only; app., accounts. and the API join as they go live.
+sites:
+  - name: Website
+    url: https://tithipatra.com
+    maxResponseTime: 5000
+  - name: Website (www)
+    url: https://www.tithipatra.com
+    maxResponseTime: 5000
+
+# The maintainer is assigned every incident, so GitHub notifies too; email goes through
+# Mailgun's EU SMTP (the secrets named below).
+assignees:
+  - TheKAdhikari
+
+# Exactly the secrets the workflows pass; nothing else is read.
+secrets:
+  - NOTIFICATION_EMAIL_SMTP_USERNAME
+  - NOTIFICATION_EMAIL_SMTP_PASSWORD
+  - NOTIFICATION_EMAIL_TO
+
+# The built-in token can't change these, and nothing should.
+skipDescriptionUpdate: true
+skipTopicsUpdate: true
+skipHomepageUpdate: true
+
+commitMessages:
+  commitAuthorName: github-actions[bot]
+  commitAuthorEmail: 41898282+github-actions[bot]@users.noreply.github.com
+
+# Pinned: the site build installs this from npm.
+customStatusWebsitePackage: "@upptime/status-page@1.17.0"
+
+status-website:
+  cname: status.tithipatra.com
+  name: Tithipatra status
+  logoUrl: /logo.svg
+  favicon: /favicon.png
+  faviconSvg: /logo.svg
+  introTitle: "**Tithipatra** service status"
+  introMessage: Live checks of Tithipatra's public services, run every five minutes from outside our servers.
+  navbar:
+    - title: Status
+      href: /
+    - title: Tithipatra
+      href: https://tithipatra.com

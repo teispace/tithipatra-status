@@ -1,0 +1,40 @@
+# Checks every site in .upptimerc.yml every five minutes, at minute 2, 7, 12 and so on
+# (off the start of the hour, GitHub's busiest moment); commits the results; opens an issue
+# and emails when a site goes down, and closes it when the site is back.
+name: Uptime
+
+on:
+  schedule:
+    - cron: "2-59/5 * * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: upptime
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      # This job pushes, and uploads no artifact.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1 # zizmor: ignore[artipacked]
+      - uses: upptime/uptime-monitor@6d218cca63a6249035b9f3b52765ee501cf88b20 # 1.46.3
+        with:
+          command: update
+        env:
+          GH_PAT: ${{ github.token }}
+          NOTIFICATION_EMAIL: "true"
+          NOTIFICATION_EMAIL_SMTP: "true"
+          NOTIFICATION_EMAIL_SMTP_HOST: smtp.eu.mailgun.org
+          NOTIFICATION_EMAIL_SMTP_PORT: "587"
+          NOTIFICATION_EMAIL_FROM: "Tithipatra status <alerts@notify.tithipatra.com>"
+          SECRETS_CONTEXT: >-
+            {"NOTIFICATION_EMAIL_SMTP_USERNAME":${{ toJson(secrets.NOTIFICATION_EMAIL_SMTP_USERNAME) }},
+            "NOTIFICATION_EMAIL_SMTP_PASSWORD":${{ toJson(secrets.NOTIFICATION_EMAIL_SMTP_PASSWORD) }},
+            "NOTIFICATION_EMAIL_TO":${{ toJson(secrets.NOTIFICATION_EMAIL_TO) }}}

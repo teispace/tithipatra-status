@@ -1,0 +1,68 @@
+# Once a day: the response-time graphs (graphs/) and the uptime badges (api/) that the
+# README and the page show. Drawing them installs npm packages, so that job is read-only;
+# the commit job runs no third-party code. Node 20, as in Upptime's own workflow: the
+# graphs are drawn with the native canvas package.
+name: Graphs
+
+on:
+  schedule:
+    - cron: "45 0 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+# One group with the checker, so two pushes never race; the time sits between its runs.
+concurrency:
+  group: upptime
+  cancel-in-progress: false
+
+jobs:
+  draw:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
+        with:
+          node-version: "20"
+      - name: Draw
+        env:
+          GH_PAT: ${{ github.token }}
+        run: |
+          npx --yes @upptime/graphs@1.2.33
+          npx --yes imagemin-cli@8.0.0 graphs/* --out-dir=graphs
+          rm -f graphs/response-time{,-day,-week,-month,-year}.png
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # 7.0.2
+        with:
+          name: graphs
+          path: |
+            graphs/
+            api/
+          retention-days: 1
+          if-no-files-found: error
+
+  commit:
+    needs: draw
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      # This job pushes, and uploads no artifact.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1 # zizmor: ignore[artipacked]
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # 8.0.2
+        with:
+          name: graphs
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add graphs api
+          git diff --cached --quiet && exit 0
+          git commit -m ":bento: Update graphs [skip ci]"
+          git pull --rebase
+          git push

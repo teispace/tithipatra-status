@@ -1,0 +1,54 @@
+# Builds the status page and publishes it to GitHub Pages (status.tithipatra.com). The build
+# installs the page from npm, so it runs with a read-only token; only the publish job may
+# write to Pages, and it runs no third-party code.
+name: Site
+
+on:
+  push:
+    branches: [main]
+    paths: [".upptimerc.yml", "assets/**", ".github/workflows/site.yml"]
+  schedule:
+    - cron: "5 1 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # 7.1.0
+        with:
+          node-version: "22"
+      - uses: upptime/uptime-monitor@6d218cca63a6249035b9f3b52765ee501cf88b20 # 1.46.3
+        with:
+          command: site
+        env:
+          GH_PAT: ${{ github.token }}
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # 5.0.0
+        with:
+          path: site/status-page/__sapper__/export
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # 5.0.1
