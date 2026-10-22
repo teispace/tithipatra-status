@@ -12,7 +12,6 @@ sites:
   - name: Website (www)
     url: https://www.tithipatra.com
     maxResponseTime: 5000
-    expectedStatusCodes: [299] # drill: forces a down alert; reverted next commit
 
 # The maintainer is assigned every incident, so GitHub notifies too; email goes through
 # Mailgun's EU SMTP (the secrets named below).
