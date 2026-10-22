@@ -24,7 +24,9 @@ secrets:
   - NOTIFICATION_EMAIL_SMTP_PASSWORD
   - NOTIFICATION_EMAIL_TO
 
-# The built-in token can't change these, and nothing should.
+# The built-in token can't change these, and nothing should. Short incidents stay on
+# record too (Upptime would delete them, which needs an admin token).
+skipDeleteIssues: true
 skipDescriptionUpdate: true
 skipTopicsUpdate: true
 skipHomepageUpdate: true
