@@ -33,9 +33,6 @@ commitMessages:
   commitAuthorName: github-actions[bot]
   commitAuthorEmail: 41898282+github-actions[bot]@users.noreply.github.com
 
-# Pinned: the site build installs this from npm.
-customStatusWebsitePackage: "@upptime/status-page@1.17.0"
-
 status-website:
   cname: status.tithipatra.com
   name: Tithipatra status
