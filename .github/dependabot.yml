@@ -1,0 +1,14 @@
+# Weekly PRs for the pinned actions (by commit, with the version in a comment), each
+# release at least three days old (D-106). The page's source tag and the graphs' npm
+# versions are pinned in the workflows and bumped in the upgrade review.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 3
+    groups:
+      actions:
+        patterns: ["*"]
