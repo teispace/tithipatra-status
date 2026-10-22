@@ -22,17 +22,19 @@
     "url": "https://www.tithipatra.com",
     "icon": "https://icons.duckduckgo.com/ip3/www.tithipatra.com.ico",
     "slug": "website-www",
-    "status": "up",
-    "uptime": "100.00%",
-    "uptimeDay": "100.00%",
-    "uptimeWeek": "100.00%",
-    "uptimeMonth": "100.00%",
-    "uptimeYear": "100.00%",
-    "time": 217,
-    "timeDay": 217,
-    "timeWeek": 217,
-    "timeMonth": 217,
-    "timeYear": 217,
-    "dailyMinutesDown": {}
+    "status": "down",
+    "uptime": "98.84%",
+    "uptimeDay": "98.84%",
+    "uptimeWeek": "98.84%",
+    "uptimeMonth": "98.84%",
+    "uptimeYear": "98.84%",
+    "time": 201,
+    "timeDay": 201,
+    "timeWeek": 201,
+    "timeMonth": 201,
+    "timeYear": 201,
+    "dailyMinutesDown": {
+      "2026-10-22": 0
+    }
   }
 ]
