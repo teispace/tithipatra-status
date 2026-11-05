@@ -23,12 +23,12 @@ jobs:
     steps:
       # This job pushes, and uploads no artifact.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # 7.0.1 # zizmor: ignore[artipacked]
-      - uses: upptime/uptime-monitor@6d218cca63a6249035b9f3b52765ee501cf88b20 # 1.46.3
+      - uses: upptime/uptime-monitor@74f0683383384927e064d76a5f21f340d6af36fc # 1.46.5
         with:
           command: response-time
         env:
           GH_PAT: ${{ github.token }}
-      - uses: upptime/uptime-monitor@6d218cca63a6249035b9f3b52765ee501cf88b20 # 1.46.3
+      - uses: upptime/uptime-monitor@74f0683383384927e064d76a5f21f340d6af36fc # 1.46.5
         with:
           command: readme
         env:
